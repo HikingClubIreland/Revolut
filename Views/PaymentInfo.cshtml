@@ -1,0 +1,111 @@
+﻿@model PaymentInfoModel
+
+<input type="hidden" asp-for="Errors" />
+
+@if (!string.IsNullOrEmpty(Model.PublicId))
+{
+    @if (Model.isCreditCard)
+    {
+        <!--
+        <form id="formCC">
+            <div>
+                <label>Full name</label>
+                <input name="full_name" placeholder="John Doe" />
+            </div>
+            <div>
+                <label>Email</label>
+                <input name="email" placeholder="customer@example.com" />
+            </div>
+            <div>
+                <label>Card</label>
+                <div name="card"></div>
+            </div>
+            <button>Submit</button>
+        </form>
+        -->
+    }
+
+    @if (Model.isRevolutPay)
+    {
+        <div id='revolut-pay'></div>
+
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            $('.payment-info-next-step-button').hide();
+                    //CARD
+            @*RevolutCheckout("@Model.PublicId", "sandbox").then(function (instance) {
+                var form = document.querySelector("#formCC");
+                var card = instance.createCardField({
+                    target: document.querySelector("[name=card]"),
+                    onSuccess() {
+                        console.log("Payment OK");
+                        $('input.payment-info-next-step-button').trigger("click");
+                    },
+                    onError(message) {
+                        console.log(message);
+                        $('#@Html.IdFor(model => model.Errors)').val(message);
+                        card = null;
+                        $('input.payment-info-next-step-button').trigger("click");
+                    },
+                    locale: "en"
+                });
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                var data = new FormData(form);
+
+                card.submit({
+                    name: data.get("full_name"),
+                    email: "@Model.BillingAddress.Email",
+                    billingAddress: {
+                        countryCode: "@Model.CountryCode",
+                        region: "@Model.BillingAddress.County",
+                        city: "@Model.BillingAddress.City",
+                        streetLine1: "@Model.BillingAddress.Address1",
+                        streetLine2: "@Model.BillingAddress.Address2",
+                        postcode: "@Model.BillingAddress.ZipPostalCode"
+                    }
+                });
+            });*@
+
+
+
+
+
+
+                        //Revolut Pay
+
+
+            RevolutCheckout("@Model.PublicId", "@Model.environment").then(function (instance) {
+                var revPay = instance.revolutPay({
+                    target: document.querySelector("#revolut-pay"),
+                    phone: "@Model.BillingAddress.PhoneNumber",
+                    email: "@Model.BillingAddress.Email",
+                    locale: "en",                    
+                    onSuccess() {
+                        $('input.payment-info-next-step-button').trigger("click");                        
+                    },
+                    onError(error) {                        
+                        $('#@Html.IdFor(model => model.Errors)').val(error.message);
+                        revPay = null;
+                        $('input.payment-info-next-step-button').trigger("click");
+                    }
+                });
+            });
+
+            $(document).on('accordion_section_opened', function (data) {
+                if (data.currentSectionId != 'opc-payment_info') {
+                    $('.payment-info-next-step-button').show();
+                }
+            });
+
+        });
+    </script>
+     }
+}
+
+@if (orderSettings.OnePageCheckoutEnabled)
+{
+    @Html.NopInlineScripts(ResourceLocation.Footer)
+}

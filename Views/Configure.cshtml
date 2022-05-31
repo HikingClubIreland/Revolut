@@ -1,0 +1,92 @@
+﻿@model ConfigurationModel
+
+@{
+    Layout = "_ConfigurePlugin";
+}
+
+@await Component.InvokeAsync("StoreScopeConfiguration")
+
+<form asp-controller="Revolut" asp-action="Configure" method="post">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>
+                    You must set up your Merchant account and development environment to get the API Key for the sandbox and live environments.<br />
+                    Follow these steps to generate API Key credentials:<br />
+                    1. <a href="https://business.revolut.com/signin" target="_blank">Log into your Business account</a> with your Revolut Business account credentials. If you don't have an account, you can click on the <b>sign up</b> option.<br />
+                    2. For sandbox credentials <a href="https://sandbox-business.revolut.com/signin" target="_blank">Log into your sandbox account</a> with your Revolut Business account credentials.<br />
+                    3. On <b>Your profile</b>, head to API section and click Merchant API.<br />
+                    5. Copy and save the API key for your app.<br />
+                    <br />
+                </p>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="UseSandbox_OverrideForStore" asp-input="UseSandbox" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="UseSandbox" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UseSandbox" />
+                        <span asp-validation-for="UseSandbox"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="ApiKey_OverrideForStore" asp-input="ApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="ApiKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ApiKey" asp-required="true" asp-value="@Model.ApiKey" />
+                        <span asp-validation-for="ApiKey"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="UseCreditCard_OverrideForStore" asp-input="UseCreditCard" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="UseCreditCard" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UseCreditCard" />
+                        <span asp-validation-for="UseCreditCard"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="CreditCardTitle_OverrideForStore" asp-input="CreditCardTitle" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="CreditCardTitle" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="CreditCardTitle" asp-required="false" asp-value="@Model.CreditCardTitle" />
+                        <span asp-validation-for="CreditCardTitle"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="UseRevolutPay_OverrideForStore" asp-input="UseRevolutPay" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="UseRevolutPay" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="UseRevolutPay" />
+                        <span asp-validation-for="UseRevolutPay"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="RevolutPayTitle_OverrideForStore" asp-input="RevolutPayTitle" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="RevolutPayTitle" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="RevolutPayTitle" asp-required="false" asp-value="@Model.RevolutPayTitle" />
+                        <span asp-validation-for="RevolutPayTitle"></span>
+                    </div>
+                </div>
+
+                <div class="form-group"></div>
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn btn-primary" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
