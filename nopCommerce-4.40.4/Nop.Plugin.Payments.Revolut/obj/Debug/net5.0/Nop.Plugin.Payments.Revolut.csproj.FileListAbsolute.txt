@@ -297,6 +297,7 @@ C:\Projects\nopCommerce_4.40.4\Presentation\Nop.Web\Plugins\Payments.Revolut\ref
 C:\Projects\nopCommerce_4.40.4\Presentation\Nop.Web\Plugins\Payments.Revolut\refs\System.Xml.XPath.dll
 C:\Projects\nopCommerce_4.40.4\Presentation\Nop.Web\Plugins\Payments.Revolut\refs\System.Xml.XPath.XDocument.dll
 C:\Projects\nopCommerce_4.40.4\Presentation\Nop.Web\Plugins\Payments.Revolut\refs\WindowsBase.dll
+C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\obj\Debug\net5.0\Nop.Plugin.Payments.Revolut.csproj.AssemblyReference.cache
 C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\obj\Debug\net5.0\Nop.Plugin.Payments.Revolut.GeneratedMSBuildEditorConfig.editorconfig
 C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\obj\Debug\net5.0\Nop.Plugin.Payments.Revolut.AssemblyInfoInputs.cache
 C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\obj\Debug\net5.0\Nop.Plugin.Payments.Revolut.AssemblyInfo.cs

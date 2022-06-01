@@ -102,9 +102,9 @@ namespace Nop.Plugin.Payments.Revolut
                 result.NewPaymentStatus = PaymentStatus.Authorized;
 
                 //CAPTURE
-                var (capturedOrder, capturedError) = await _serviceManager.captureOrderAsync(_settings, orderId.ToString());
-                if (!string.IsNullOrEmpty(capturedError))
-                    return new ProcessPaymentResult { Errors = new[] { capturedError } };
+                (order, error) = await _serviceManager.captureOrderAsync(_settings, orderId.ToString());
+                if (!string.IsNullOrEmpty(error))
+                    return new ProcessPaymentResult { Errors = new[] { error } };
             }
 
             //AUTOMATIC CAPTURE
