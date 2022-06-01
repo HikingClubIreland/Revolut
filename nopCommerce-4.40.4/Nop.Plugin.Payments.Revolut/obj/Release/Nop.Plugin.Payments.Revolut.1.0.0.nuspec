@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Nop.Plugin.Payments.Revolut</id>
+    <version>1.0.0</version>
+    <authors>Dev Team</authors>
+    <projectUrl>https://www.hikingclubireland.ie/</projectUrl>
+    <description>Package Description</description>
+    <copyright>GNU GPL v3.0 © Hiking Club Ireland</copyright>
+    <repository type="Git" url="https://github.com/HikingClubIreland/nopCommerce" />
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Nop.Web" version="4.4.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+    <contentFiles>
+      <files include="any/net5.0/logo.png" buildAction="Content" />
+      <files include="any/net5.0/plugin.json" buildAction="Content" />
+      <files include="any/net5.0/Views/Configure.cshtml" buildAction="Content" />
+      <files include="any/net5.0/Views/Buttons.cshtml" buildAction="Content" />
+      <files include="any/net5.0/Views/PaymentInfo.cshtml" buildAction="Content" />
+      <files include="any/net5.0/Views/_ViewImports.cshtml" buildAction="Content" />
+    </contentFiles>
+  </metadata>
+  <files>
+    <file src="C:\Projects\nopCommerce_4.40.4\Presentation\Nop.Web\Plugins\Payments.Revolut\Nop.Plugin.Payments.Revolut.dll" target="lib\net5.0\Nop.Plugin.Payments.Revolut.dll" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\logo.png" target="content\logo.png" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\logo.png" target="contentFiles\any\net5.0\logo.png" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\plugin.json" target="content\plugin.json" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\plugin.json" target="contentFiles\any\net5.0\plugin.json" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\Configure.cshtml" target="content\Views\Configure.cshtml" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\Configure.cshtml" target="contentFiles\any\net5.0\Views\Configure.cshtml" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\Buttons.cshtml" target="content\Views\Buttons.cshtml" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\Buttons.cshtml" target="contentFiles\any\net5.0\Views\Buttons.cshtml" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\PaymentInfo.cshtml" target="content\Views\PaymentInfo.cshtml" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\PaymentInfo.cshtml" target="contentFiles\any\net5.0\Views\PaymentInfo.cshtml" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\_ViewImports.cshtml" target="content\Views\_ViewImports.cshtml" />
+    <file src="C:\Projects\nopCommerce_4.40.4\Plugins\Nop.Plugin.Payments.Revolut\Views\_ViewImports.cshtml" target="contentFiles\any\net5.0\Views\_ViewImports.cshtml" />
+  </files>
+</package>

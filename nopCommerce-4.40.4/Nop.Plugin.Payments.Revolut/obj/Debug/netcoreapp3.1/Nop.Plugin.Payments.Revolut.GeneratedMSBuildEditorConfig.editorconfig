@@ -1,0 +1,3 @@
+is_global = true
+build_property.RootNamespace = Nop.Plugin.Payments.Revolut
+build_property.ProjectDir = C:\Users\JMONR\Documents\GitHub\Revolut\

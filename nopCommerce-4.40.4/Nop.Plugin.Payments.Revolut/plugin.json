@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "Revolut Payment",
+  "SystemName": "Payments.Revolut",
+  "Version": "0.1",
+  "SupportedVersions": [ "4.40" ],
+  "Author": "Hiking Club Ireland dev team",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.Revolut.dll",
+  "Description": "Checkout with Revolut gives your buyers a simplified and secure checkout experience. Revolut intelligently presents the most relevant payment types to your shoppers, automatically, making it easier for them to complete their purchase."
+}
