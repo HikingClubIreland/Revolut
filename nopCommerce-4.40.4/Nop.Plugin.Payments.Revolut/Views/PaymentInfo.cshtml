@@ -4,31 +4,32 @@
 
 @if (!string.IsNullOrEmpty(Model.PublicId))
 {
+<div id="revolutPaymentBox">
     @if (Model.isRevolutPay)
     {
-        <div id='revolut-pay'></div>
+        <div id="revolut-pay"></div>
 
-
-    <script asp-location="Footer">
+        <script asp-location="Footer">
         $(document).ready(function () {
             $('.payment-info-next-step-button').hide();
-            //Revolut Pay
-            RevolutCheckout("@Model.PublicId", "@Model.environment").then(function (instance) {
-                var revPay = instance.revolutPay({
-                    target: document.querySelector("#revolut-pay"),
+
+                    //Revolut Pay
+                    RevolutCheckout("@Model.PublicId", "@Model.environment").then(function(instance) {
+                        var revPay = instance.revolutPay({
+                        target: document.querySelector("#revolut-pay"),
                     phone: "@Model.BillingAddress.PhoneNumber",
                     email: "@Model.BillingAddress.Email",
-                    locale: "en",                    
+                    locale: "en",
                     onSuccess() {
-                        $('button.payment-info-next-step-button').trigger("click");                        
-                    },
-                    onError(error) {                        
-                        $('#@Html.IdFor(model => model.Errors)').val(error.message);
-                        revPay = null;
                         $('button.payment-info-next-step-button').trigger("click");
-                    }
-                });
-            });
+                            },
+                    onError(error) {
+                        $('#@Html.IdFor(model => model.Errors)').val(error.message);
+                                revPay = null;
+                        $('button.payment-info-next-step-button').trigger("click");
+                            }
+                        });
+                    });
 
             $(document).on('accordion_section_opened', function (data) {
                 if (data.currentSectionId != 'opc-payment_info') {
@@ -36,8 +37,84 @@
                 }
             });
         });
-    </script>
-     }
+        </script>
+
+
+        @if (Model.isCreditCard)
+        {
+            <div id="OR">OR</div>
+        }
+    }
+    @if (Model.isCreditCard)
+    {
+        //Credit Card
+        <div id="revolut-cc">
+            <form id="form-cc">
+                <div>
+                    <label>Full name</label>
+                    <input name="full_name" placeholder="John Doe" />
+                </div>
+                <div>
+                    <label>Card</label>
+                    <div name="card"></div>
+                </div>
+                <button>Submit</button>
+            </form>
+        </div>
+
+
+        <script asp-location="Footer">
+        $(document).ready(function () {
+            $('.payment-info-next-step-button').hide();
+
+                    RevolutCheckout("@Model.PublicId", "@Model.environment").then(function(instance) {
+                        var form = document.querySelector("#form-cc");
+                        var card = instance.createCardField({
+                        target: document.querySelector("[name=card]"),
+                        onSuccess() {
+                                window.alert("Thank you!");
+                            },
+                        onError(message) {
+                                window.alert("Oh no :(");
+                                console.log(message);
+                            },
+                        locale: "en"
+                        });
+
+
+                        form.addEventListener("submit", function(event) {
+                        // Prevent browser form submission. You need to submit card details first.
+                        event.preventDefault();
+                        var data = new FormData(form);
+
+            card.submit({
+                            name: data.get("full_name"),
+                            email: data.get("email"),
+                            billingAddress: {
+                                countryCode: data.get("country"),
+                                region: data.get("state"),
+                                city: data.get("city"),
+                                streetLine1: data.get("line1"),
+                                streetLine2: data.get("line2"),
+                                postcode: data.get("postal")
+                            }
+    });
+                    });
+                    });
+
+                        $(document).on('accordion_section_opened', function (data) {
+                if (data.currentSectionId != 'opc-payment_info') {
+                    $('.payment-info-next-step-button').show();
+                }
+            });
+        });
+        </script>
+    }
+
+
+
+
+</div>
 }
 
 @if (orderSettings.OnePageCheckoutEnabled)
