@@ -2,9 +2,99 @@
 
 <input type="hidden" asp-for="Errors" />
 
+<style type="text/css">
+    :root {
+        --revolut-color-gray: #b7bcbf;
+        --revolut-color-light-gray: #f4f4f4;
+        --revolut-color-bright: white;
+        --revolut-color-dark: black;
+
+        --revolut-spacing-sm: 8px;
+        --revolut-spacing-md: 16px;
+        --revolut-spacing-lg: 24px;
+    }
+
+    .revolut {
+        display: flex;
+        flex-flow: column nowrap;
+        gap: var(--revolut-spacing-sm);
+    }
+
+    .revolut [aria-hidden] {
+        display: none;
+    }
+
+    #revolutPaymentBox :where(.form-group, input) {
+        margin: 0;
+    }
+
+    .revolut--form-group {
+        position: relative;
+    }
+
+    .revolut--form-group[data-state="pristine"] .revolut--form--label {
+        opacity: 0;
+        transform: translate(var(--revolut-spacing-md), var(--revolut-spacing-sm));
+    }
+
+    .revolut--form-group[data-state="blurred"] .revolut--form--label {
+        transform: translate(8px, -2px);
+    }
+    
+    .revolut--form-group[data-state="focused"] .revolut--form--label {
+        transform: translate(8px, -2px);
+    }
+
+   .revolut--form {
+       display: grid;
+       gap: var(--revolut-spacing-md);
+       margin: var(--revolut-spacing-lg) auto;
+       max-width: 500px;
+       width: 100%;
+   }
+
+   .revolut--fieldset {
+       display: grid;
+       gap: var(--revolut-spacing-md);
+       grid-template-columns: 1fr;
+       grid-template-rows: auto;
+   }
+
+    .revolut--form-control {
+        background-color: var(--revolut-color-light-gray);
+        border-radius: 4px;
+        border: 1px solid var(--revolut-color-gray);
+        padding: calc(var(--revolut-spacing-sm) + 4px) var(--revolut-spacing-md) var(--revolut-spacing-sm) var(--revolut-spacing-md);
+        width: 100%;
+    }
+
+    .revolut--field-col-2 {
+        display: grid;
+        gap: var(--revolut-spacing-sm);
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+   .revolut--form--label {
+       font-size: 12px;
+       opacity: 1;
+       position: absolute;
+       transform: translate(0, 0);
+       transition: transform 0.2s ease-in, opacity 0.2s ease-in;
+       transition-delay: 0.1s;
+       pointer-events: none;
+   }
+
+   .revolut--error-message {
+       display: flex;
+       padding: var(--revolut-spacing-md) !important;
+       margin: var(--revolut-spacing-md) 0;
+   }
+
+</style>
+
 @if (!string.IsNullOrEmpty(Model.PublicId))
 {
-<div id="revolutPaymentBox">
+<div id="revolutPaymentBox" class="revolut">
     @if (Model.isRevolutPay)
     {
         <div id="revolut-pay"></div>
@@ -19,9 +109,11 @@
                         target: document.querySelector("#revolut-pay"),
                     phone: "@Model.BillingAddress.PhoneNumber",
                     email: "@Model.BillingAddress.Email",
-                    locale: "en",
+                            locale: "en",
+                            styles: {},
                     onSuccess() {
                         $('button.payment-info-next-step-button').trigger("click");
+                        console.log("onSuccess");
                             },
                     onError(error) {
                         $('#@Html.IdFor(model => model.Errors)').val(error.message);
@@ -42,23 +134,54 @@
 
         @if (Model.isCreditCard)
         {
-            <div id="OR">OR</div>
+            <button class="btn btn-primary btn-lg btn-block" id="revolut--card-method-toggler">
+                Debit or Credit Card
+            </button>   
         }
     }
     @if (Model.isCreditCard)
     {
         //Credit Card
         <div id="revolut-cc">
-            <form id="form-cc">
-                <div>
-                    <label>Full name</label>
-                    <input name="full_name" placeholder="John Doe" />
+            <form id="form-cc" class="revolut--form" aria-hidden="true">
+                <fieldset class="revolut--fieldset">
+                    <div class="revolut--error-message alert alert-danger" aria-hidden="true">
+                        Sorry but something went wrong
+                    </div>
+                    <div class="revolut--form-group revolut--card-group" tabindex="0">
+                        <label>
+                            <span class="revolut--form-label">Card</span>
+                            <div name="card" class="revolut--form-control"></div>
+                        </label>
+                    </div>
+                    <div class="revolut--field-col-2">
+                        <div class="revolut--form-group" data-state="pristine">
+                            <label>
+                                <span class="revolut--form--label" id="revolut-full-name-label">First name</span>
+                                <input aria-label="Full name"
+                                       class="revolut--form-control"
+                                       aria-labelledby="revolut-full-name-label"
+                                       name="first_name"
+                                       required
+                                       placeholder="First name" />
+                            </label>
+                        </div>
+                        <div class="revolut--form-group" data-state="pristine">
+                            <label>
+                                <span class="revolut--form--label" id="revolut-address-1-label">Last Name</span>
+                                <input
+                                       placeholder="Last name"
+                                       class="revolut--form-control"
+                                       aria-labelledby="revolut-address-1-label"
+                                       required
+                                       name="last_name" />
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+                <div class="revolut--actions">
+                    <button class="btn btn-primary">Submit</button>
                 </div>
-                <div>
-                    <label>Card</label>
-                    <div name="card"></div>
-                </div>
-                <button>Submit</button>
             </form>
         </div>
 
@@ -67,47 +190,97 @@
         $(document).ready(function () {
             $('.payment-info-next-step-button').hide();
 
-                    RevolutCheckout("@Model.PublicId", "@Model.environment").then(function(instance) {
-                        var form = document.querySelector("#form-cc");
-                        var card = instance.createCardField({
-                        target: document.querySelector("[name=card]"),
-                        onSuccess() {
-                                window.alert("Thank you!");
-                            },
-                        onError(message) {
-                                window.alert("Oh no :(");
-                                console.log(message);
-                            },
-                        locale: "en"
-                        });
+            RevolutCheckout("@Model.PublicId", "@Model.environment").then(function(instance) {
+                var form = document.querySelector("#form-cc");
+                var card = instance.createCardField({
+                    target: document.querySelector("[name=card]"),
+                    onSuccess() {
+                        $('button.payment-info-next-step-button').trigger("click");
+                    },
+                    onError(message) {
+                        console.error(message);
+                        document.querySelector('.revolut--error-message').removeAttribute('aria-hidden');
+                    },
+                    locale: "en"
+                });
 
+                form.addEventListener("submit", function(event) {
+                    // Prevent browser form submission. You need to submit card details first.
+                    event.preventDefault();
+                    var data = new FormData(form);
 
-                        form.addEventListener("submit", function(event) {
-                        // Prevent browser form submission. You need to submit card details first.
-                        event.preventDefault();
-                        var data = new FormData(form);
-
-            card.submit({
-                            name: data.get("full_name"),
-                            email: data.get("email"),
-                            billingAddress: {
-                                countryCode: data.get("country"),
-                                region: data.get("state"),
-                                city: data.get("city"),
-                                streetLine1: data.get("line1"),
-                                streetLine2: data.get("line2"),
-                                postcode: data.get("postal")
-                            }
-    });
+                    card.submit({
+                        name: `${data.get("first_name")} ${data.get("last_name")}`,
+                        email: "@Model.BillingAddress.Email",
                     });
-                    });
+                });
+            });
 
-                        $(document).on('accordion_section_opened', function (data) {
+            $(document).on('accordion_section_opened', function (data) {
                 if (data.currentSectionId != 'opc-payment_info') {
                     $('.payment-info-next-step-button').show();
                 }
             });
+
+            function bootstrapCreditCardCtl() {
+                try {
+                    document
+                        .querySelector("#revolut--card-method-toggler")
+                        .addEventListener(
+                            "click",
+                            toggleContainer(document.querySelector(".revolut--form"))
+                        );
+
+                    Array.from(document.querySelectorAll("input.revolut--form-control"))
+                        .map(field => {
+                            field.addEventListener("focus", onFieldFocus);
+                        });
+
+                    Array.from(document.querySelectorAll("input.revolut--form-control"))
+                        .map(field => {
+                            field.addEventListener("blur", onFieldBlur);
+                        });
+
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            function toggleContainer(container) {
+                return (event) => {
+                    event.preventDefault();
+                    container.toggleAttribute("aria-hidden");
+                }
+            }
+
+            function onFieldFocus(event) {
+                event.preventDefault();
+                setFieldState("focused")(event.target.parentElement);
+            }
+
+            function onFieldBlur(event) {
+                event.preventDefault();
+                const { value } = event.target
+                setFieldState(value ? "blurred" : "pristine")(event.target.parentElement);
+            }
+
+            function setFieldState(newState) {
+                const setState = ($el) => {
+                    if (!$el) return;
+
+                    const { state } = $el.dataset
+                    if (!state) return setState($el.parentElement);
+
+                    $el.dataset.state = newState;
+                }
+
+                return setState;
+            }
+
+            bootstrapCreditCardCtl();
+
         });
+
         </script>
     }
 
